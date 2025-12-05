@@ -1,0 +1,85 @@
+from math import gcd 
+
+
+class  Solution : 
+    def  canMeasureWater ( 
+        self, jug_1_capacity: int , jug_2_capacity: int , target_capacity: int
+     ) -> bool : 
+        if target_capacity == 0 : 
+            return  True 
+
+        if jug_1_capacity + jug_2_capacity < target_capacity: 
+            return  False 
+
+        return target_capacity % gcd(jug_1_capacity, jug_2_capacity) == 0
+
+Solution().canMeasureWater(3, 5, 5)
+Solution().canMeasureWater(3, 5, 50)
+
+from math import gcd
+
+def water_jug(jug1_size, jug2_size, target):
+
+
+    if target == 0:
+        return True
+
+    if target > jug1_size + jug2_size:
+        return False
+
+    divisor = gcd(jug1_size, jug2_size)
+
+    if target % divisor == 0:
+        print("It's possible")
+        return True
+    else:
+        return False
+
+water_jug(3, 5, 5)
+
+from collections import deque
+
+def water_jug_steps(jug1_size, jug2_size, target):
+    start = (0, 0)
+    queue = deque([(start, [])])
+    visited = set()
+
+    while queue:
+        (a, b), steps = queue.popleft()
+
+      
+        if a == target or b == target or a + b == target:
+            steps.append(f"Jug1={a}L, Jug2={b}L (Total={a+b}L)")
+            return True, steps
+
+        if (a, b) in visited:
+            continue
+        visited.add((a, b))
+
+        # All possible states
+        next_states = [
+            ((jug1_size, b),          "Fill Jug1"),
+            ((a, jug2_size),          "Fill Jug2"),
+            ((0,  b),                  "Empty Jug1"),
+            ((a,  0),                  "Empty Jug2"),
+          
+            (( a - min(a, jug2_size - b),
+                b + min(a, jug2_size - b)
+            ), "Pour Jug1→Jug2"),
+          
+            ((a + min(b, jug1_size - a),
+                b - min(b, jug1_size - a)
+            ), "Pour Jug2→Jug1")
+        ]
+
+        for (na, nb), action in next_states:
+            queue.append(((na, nb), steps + [f"{action} → Jug1={na}L, Jug2={nb}L"]))
+
+    return False, []
+
+
+# Example
+possible, steps = water_jug_steps(3, 5, 4)
+if possible:
+    for i, step in enumerate(steps, 1):
+        print(f"  Step {i}: {step}")
