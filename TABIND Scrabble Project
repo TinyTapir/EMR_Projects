@@ -1,0 +1,44 @@
+words = [
+    "tab",
+    "bat",
+    "bin",
+    "nab",
+    "band",
+    "bind",
+    "bad",
+    "dab",
+    "and",
+    "tan",
+    "ant",
+    "ban",
+    "tin",
+    "india",
+    "banana",
+    "tandem",
+    "dabbin",
+    "data"
+]
+
+letters = "tabind"
+
+valid_words = []
+
+for word in words:
+    valid = True
+
+
+    for letter in word:
+        if word.count(letter) > letters.count(letter):
+            valid = False
+            break
+
+    if valid:
+        valid_words.append(word)
+
+valid_words = sorted(set(valid_words))
+
+print(valid_words)
+
+
+num_words = len(valid_words)
+print(num_words)
