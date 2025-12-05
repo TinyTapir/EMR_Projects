@@ -1,0 +1,34 @@
+import csv
+import json
+
+with open('/content/drive/MyDrive/EMR Project/capitals.csv', 'r') as csv_file:
+  csv_reader = csv.DictReader(csv_file)
+  data = list(csv_reader)
+
+
+with open('capitals.json', 'w') as json_file:
+    json.dump({'capitals': data}, json_file, indent=2)
+
+pip install googlemaps
+
+import googlemaps
+
+with open('capitals.json', 'r') as f:
+    capitals_data = json.load(f)
+
+for capital in capitals_data['capitals']:
+    address = capital.get('Address')
+    if address:
+        geocode_result = gmaps.geocode(address)
+        if geocode_result:
+            location = geocode_result[0]['geometry']['location']
+            capital['latitude'] = location['lat']
+            capital['longitude'] = location['lng']
+        else:
+            capital['latitude'] = None
+            capital['longitude'] = None
+    else:
+        capital['latitude'] = None
+        capital['longitude'] = None
+
+output_file_name = 'capitals_coords.json'
